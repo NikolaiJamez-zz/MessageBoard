@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MessageBoard</title>
+    <script src="./js/p5.js"></script>
+    <script src="./js/sketch.js"></script>
+    <script src="./js/shapes.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        html,
+        body {
+            background: #000000;
+        }
+
+        label {
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row" id="menu">
+            <div class="col-12 d-flex justify-content-center">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                    Instructions
+                </button>
+                <form class="form-inline">
+                    <div class="form-group sm-3">
+                        <label for="input-colour">Your colour: </label>
+                        <input type="color" class="form-control" id="input-color" name="color" style="width: 100px;"
+                            value="#FFFFFF">
+                    </div>
+                    <div class="form-group sm-3">
+                        <label for="input-shape">Your shape: </label>
+                        <select class="form-control" name="shape" id="input-shape">
+                            <option value="circle">Circle</option>
+                            <option value="square">Square</option>
+                            <option value="heart">Heart</option>
+                            <option value="triangle">Triangle</option>
+                            <option value="diamond">Diamond</option>
+                            <option value="5-star">5-pointed Star</option>
+                        </select>
+                    </div>
+                    <div class="form-group sm-3">
+                        <label for="input-text">Your message: </label>
+                        <input type="text" class="form-control" id="input-text" name="message" max="50"
+                            placeholder="Add your message here">
+                    </div>
+                </form>
+                <button class="btn btn-primary" onclick="saveData()">Save!</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Instructions</h5>
+                </div>
+                <div class="modal-body">
+                    To leave a message for the whole world follow these steps!<br>
+                    <hr>
+                    1. Select a colour to identify your message<br>
+                    2. Type your message into the provided box<br>
+                    3. Hit save and see your message on the big worldwide canvas!<br>
+                    <br>
+                    To see any other message, hover over any space and see the message popup.<br>
+                    <br>
+                    Press ESC to close this window
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+    <script type="text/javascript">
+        $(window).on('load', function () {
+            $('#exampleModalCenter').modal('show');
+        });
+    </script>
+</body>
+
+</html>

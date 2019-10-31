@@ -12,14 +12,20 @@ let records;
 let messages;
 let count;
 let shape;
+let canvas;
 
 function setup() {
-    createCanvas(windowWidth, windowHeight - document.getElementById('menu').clientHeight - padding);
+    canvas = createCanvas(windowWidth - 45, windowHeight - 45);
+    canvas.parent('page-content-wrapper');
     getData();
     textAlign(CENTER, CENTER);
     rectMode(CENTER);
     noStroke();
     count = 0;
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
@@ -42,9 +48,9 @@ function draw() {
     fill(colour);
     if (clicked) {
         drawShape(x, y, shape);
+    } else {
+        drawShape(mouseX, mouseY, shape);
     }
-
-    drawShape(mouseX, mouseY, shape);
     count++;
 }
 
@@ -98,32 +104,50 @@ async function getData() {
 
 //Saves data to server
 function saveData() {
-    if (clicked) {
-        data = {
-            colour,
-            message,
-            x,
-            y,
-            shape
-        };
-        options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        };
-        fetch('/api', options);
-    } else {
-        alert('Please click where you would like to leave your message.');
+    data = {
+        colour,
+        message,
+        x,
+        y,
+        shape
+    };
+    options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+    fetch('/api', options);
+}
+
+function checkBounds() {
+    let inBound = true;
+    
+    if (mouseY < 0) {
+        inBound = false;
     }
+    if (mouseY > windowHeight) {
+        inBound = false;
+    }
+    if (mouseX < 0) {
+        inBound = false;
+    }
+    if (mouseX > windowWidth) {
+        inBound = false;
+    }
+    if (mouseY > 0 && mouseY < 135 && mouseX > 0 && mouseX < 45) {
+        inBound = false;
+    }
+    return inBound;
 }
 
 //Mouse click event
 function mouseClicked() {
-    if (mouseY >= 0) {
+    if (checkBounds() && !clicked) {
         x = mouseX;
         y = mouseY;
+        saveData();
         clicked = true;
     }
 }

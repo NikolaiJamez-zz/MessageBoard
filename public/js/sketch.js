@@ -1,5 +1,6 @@
 const messageWidth = 10;
-const padding = 15
+const padding = 15;
+const amp = 1;
 
 let x;
 let y;
@@ -13,6 +14,11 @@ let messages;
 let count;
 let shape;
 let canvas;
+let active;
+let freq;
+let wave;
+let playing;
+let playFreq;
 
 function setup() {
     canvas = createCanvas(windowWidth - 45, windowHeight - 45);
@@ -22,6 +28,10 @@ function setup() {
     rectMode(CENTER);
     noStroke();
     count = 0;
+    wave = new p5.TriOsc();
+    wave.amp(1);
+    wave.freq(0);
+    wave.start();
 }
 
 function windowResized() {
@@ -30,6 +40,7 @@ function windowResized() {
 
 function draw() {
     background(0);
+    active = document.activeElement.id;
     //Automatic data refresh every 100 ticks
     //This allows for dynamic refreshing without refreshing the page
     if (count >= 100) {
@@ -37,13 +48,19 @@ function draw() {
         count = 0;
     }
 
-    if (messages) {
-        drawMessages();
-    }
-
     colour = document.getElementById('input-color').value;
     message = document.getElementById('input-text').value;
     shape = document.getElementById('input-shape').value;
+    freq = document.getElementById('input-freq').value;
+
+    if (active == "input-freq") {
+        wave.freq(Number(freq));
+        playing = true;
+    }
+
+    if (messages) {
+        drawMessages();
+    }
 
     fill(colour);
     if (clicked) {
@@ -51,6 +68,13 @@ function draw() {
     } else {
         drawShape(mouseX, mouseY, shape);
     }
+
+    if (playing) {
+        wave.amp(1, 0.1);
+    } else {
+        wave.amp(0, 0.1);
+    }
+    playing = false;
     count++;
 }
 
@@ -61,7 +85,8 @@ function drawMessages() {
             //Draws shape of message to screen
             drawShape(m.x, m.y, m.shape, 2);
             fill(255);
-
+            wave.freq(Number(m.freq));
+            playing = true;
             //Draws text message to screen
             rect(m.x, m.y - 2 * messageWidth, textWidth(m.message) + 6, 20);
             fill(0);
@@ -109,7 +134,8 @@ function saveData() {
         message,
         x,
         y,
-        shape
+        shape,
+        freq
     };
     options = {
         method: 'POST',
@@ -123,7 +149,7 @@ function saveData() {
 
 function checkBounds() {
     let inBound = true;
-    
+
     if (mouseY < 0) {
         inBound = false;
     }

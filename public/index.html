@@ -11,6 +11,7 @@
     <script src="./js/shapes.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/sidebar.css">
     <style>
         html,
         body {
@@ -20,62 +21,63 @@
         label {
             color: #FFFFFF;
         }
+
+        hr {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid #ccc;
+            padding: 0;
+        }
     </style>
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row" id="menu">
-            <div class="col-12 d-flex justify-content-center">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                    Instructions
-                </button>
-                <form class="form-inline">
-                    <div class="form-group sm-3">
-                        <label for="input-colour">Your colour: </label>
-                        <input type="color" class="form-control" id="input-color" name="color" style="width: 100px;"
-                            value="#FFFFFF">
-                    </div>
-                    <div class="form-group sm-3">
-                        <label for="input-shape">Your shape: </label>
-                        <select class="form-control" name="shape" id="input-shape">
-                            <option value="circle">Circle</option>
-                            <option value="square">Square</option>
-                            <option value="heart">Heart</option>
-                            <option value="triangle">Triangle</option>
-                            <option value="diamond">Diamond</option>
-                            <option value="5-star">5-pointed Star</option>
-                        </select>
-                    </div>
-                    <div class="form-group sm-3">
-                        <label for="input-text">Your message: </label>
-                        <input type="text" class="form-control" id="input-text" name="message" max="50"
-                            placeholder="Add your message here">
-                    </div>
-                </form>
-                <button class="btn btn-primary" onclick="saveData()">Save!</button>
-            </div>
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav justify-content-center text-center">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Options
+                    </a>
+                </li>
+                <hr>
+                <li>
+                    <a href="#">Step 1: Select a colour</a>
+                    <input type="color" id="input-color" name="color" style="width: 100px;" value="#FFFFFF">
+                </li>
+                <hr>
+                <li>
+                    <a href="#">Step 2: Select a shape</a>
+                    <select name="shape" id="input-shape">
+                        <option value="circle">Circle</option>
+                        <option value="square">Square</option>
+                        <option value="heart">Heart</option>
+                        <option value="triangle">Triangle</option>
+                        <option value="diamond">Diamond</option>
+                        <option value="5-star">5-pointed Star</option>
+                    </select>
+                </li>
+                <hr>
+                <li>
+                    <a href="#">Step 3: Enter a message</a>
+                    <input type="text" id="input-text" name="message" max="50" placeholder="Add your message here">
+                </li>
+                <hr>
+                <li>
+                    <a href="#">Step 4: Place your message<br>(Click on empty space)<br>Note: You can only place one</a>
+                </li>
+                <hr>
+                <li>
+                    <a href="#">Step 5: Your done!</a>
+                    <a href="#">The message is live!</a>
+                </li>
+                <hr>
+            </ul>
         </div>
-    </div>
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Instructions</h5>
-                </div>
-                <div class="modal-body">
-                    To leave a message for the whole world follow these steps!<br>
-                    <hr>
-                    1. Select a colour and shape to identify your message<br>
-                    2. Type your message into the provided box<br>
-                    3. Hit save and see your message on the big worldwide canvas!<br>
-                    <br>
-                    To see any other message, hover over any space and see the message popup.<br>
-                    <br>
-                    Press ESC to close this window
-                </div>
-            </div>
+        <div id="page-content-wrapper">
+            <button id="menu-toggle" class="btn btn-secondary"><i id="toggleIcon" class="fa fa-angle-double-down"></i>
+                Toggle Options <i class="fa fa-filter"></i></button>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -87,11 +89,27 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
-    <script type="text/javascript">
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            var isIE11 = !!navigator.userAgent.match(/Trident.*rv\:11\./);
+            $("#toggleIcon").toggleClass("fa fa-angle-double-down fa fa-angle-double-up")
+            $("#wrapper").toggleClass("toggled");
+
+            if (isIE11) {
+                if ($("#wrapper").hasClass("toggled")) {
+                    $('#sidebar-wrapper').css("margin-left", "-268px")
+                } else {
+                    $('#sidebar-wrapper').css("margin-left", "-250px")
+                }
+            }
+        });
+    </script>
+    <!-- <script type="text/javascript">
         $(window).on('load', function () {
             $('#exampleModalCenter').modal('show');
         });
-    </script>
+    </script> -->
 </body>
 
 </html>

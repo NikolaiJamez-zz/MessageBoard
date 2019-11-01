@@ -14,11 +14,8 @@ let messages;
 let count;
 let shape;
 let canvas;
-let active;
-let freq;
-let wave;
-let playing;
-let playFreq;
+let synth;
+let sound;
 
 function setup() {
     canvas = createCanvas(windowWidth - 45, windowHeight - 45);
@@ -28,10 +25,15 @@ function setup() {
     rectMode(CENTER);
     noStroke();
     count = 0;
-    wave = new p5.TriOsc();
-    wave.amp(1);
-    wave.freq(0);
-    wave.start();
+    synth = new WebAudioTinySynth();
+    synth.setVoices(1);
+    synth.setReverbLev(0);
+    for (var i = 0; i < 128; ++i) {
+        var o = document.createElement("option");
+        o.innerHTML = synth.getTimbreName(0, i);
+        o.value = i;
+        document.getElementById("input-instrument").appendChild(o);
+    }
 }
 
 function windowResized() {
@@ -40,17 +42,15 @@ function windowResized() {
 
 function draw() {
     background(0);
-    active = document.activeElement.id;
+    colour = document.getElementById('input-color').value;
+    message = document.getElementById('input-text').value;
+    shape = document.getElementById('input-shape').value;
+    sound = document.getElementById('input-instrument').value;
     //Automatic data refresh every 100 ticks
     //This allows for dynamic refreshing without refreshing the page
     if (count >= 100) {
         getData();
         count = 0;
-    }
-
-    if (active == "input-freq") {
-        wave.freq(Number(freq));
-        playing = true;
     }
 
     if (messages) {
@@ -63,13 +63,6 @@ function draw() {
     } else {
         drawShape(mouseX, mouseY, shape);
     }
-
-    if (playing) {
-        wave.amp(1, 0.1);
-    } else {
-        wave.amp(0, 0.1);
-    }
-    playing = false;
     count++;
 }
 
@@ -80,14 +73,18 @@ function drawMessages() {
             //Draws shape of message to screen
             drawShape(m.x, m.y, m.shape, 2);
             fill(255);
-            wave.freq(Number(m.freq));
-            playing = true;
+            if (!m.playing) {
+                synth.send([0xc0, m.sound]);
+                synth.send([0x90, m.sound, 100]);
+                m.playing = true;
+            }
             //Draws text message to screen
             rect(m.x, m.y - 2 * messageWidth, textWidth(m.message) + 6, 20);
             fill(0);
             text(m.message, m.x, m.y - 2 * messageWidth);
         } else {
             drawShape(m.x, m.y, m.shape);
+            m.playing = false;
         }
     }
 }
@@ -124,17 +121,13 @@ async function getData() {
 
 //Saves data to server
 function saveData() {
-    colour = document.getElementById('input-color').value;
-    message = document.getElementById('input-text').value;
-    shape = document.getElementById('input-shape').value;
-    freq = document.getElementById('input-freq').value;
     data = {
         colour,
         message,
         x,
         y,
         shape,
-        freq
+        sound
     };
     options = {
         method: 'POST',
@@ -165,6 +158,11 @@ function checkBounds() {
         inBound = false;
     }
     return inBound;
+}
+
+function Prog(pg) {
+    synth.send([0xc0, pg]);
+    synth.send([0x90, pg, 100]);
 }
 
 //Mouse click event

@@ -48,11 +48,6 @@ function draw() {
         count = 0;
     }
 
-    colour = document.getElementById('input-color').value;
-    message = document.getElementById('input-text').value;
-    shape = document.getElementById('input-shape').value;
-    freq = document.getElementById('input-freq').value;
-
     if (active == "input-freq") {
         wave.freq(Number(freq));
         playing = true;
@@ -129,6 +124,10 @@ async function getData() {
 
 //Saves data to server
 function saveData() {
+    colour = document.getElementById('input-color').value;
+    message = document.getElementById('input-text').value;
+    shape = document.getElementById('input-shape').value;
+    freq = document.getElementById('input-freq').value;
     data = {
         colour,
         message,
